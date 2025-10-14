@@ -45,7 +45,7 @@ utility_emojis = {
 
 # --- Page and Session State Initialization ---
 
-st.set_page_config(layout="wide", page_title="Mood Adaptive Story")
+st.set_page_config(layout="wide", page_title=" AI Mood Adaptive Story")
 
 if 'username' not in st.session_state:
     st.session_state.username = ""
