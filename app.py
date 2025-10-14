@@ -12,12 +12,9 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 # --- AI and Model Configuration ---
-google_api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk"
-
-
 # Securely configure the Google Gemini API
 try:
-    genai.configure(api_key=st.secrets["google_api_key"])
+    genai.configure(api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk")
 except Exception as e:
     st.error("Google API Key not found. Please add it to your Streamlit secrets.", icon="🔑")
 
