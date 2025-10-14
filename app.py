@@ -407,7 +407,9 @@ st.markdown("""
 <footer class="dynamic-footer">
     <div class="footer-content">
         <h2 class="footer-heading">🌟 Mood Adaptive Story Generator</h2>
-        <p class="footer-description" style="color: black;">This app's theme and story content adapt to your feelings. Powered by AI. 💫</p>
+        <p class="footer-description" style="color: black;">
+Experience stories that truly resonate with you — this app’s theme and narrative content adapt to your feelings, moods, and emotions in real time. Powered by AI, bringing your inner world to life. 💫
+</p>
     </div>
 </footer>
 """, unsafe_allow_html=True)
