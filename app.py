@@ -22,9 +22,9 @@ except Exception as e:
 # --- Dictionaries for Mood Customization ---
 
 color_palette = {
-    "Happy":   ["#F38080", "#E69DB8", "#ECEF4B", "#46C6E9"],
+    "Happy":   ["#DFAF41", "#E69DB8", "#ECEF4B", "#46C6E9"],
     "Sad":     ["#222831", "#393E46", "#5A3BE2", "#6CC2FF"],
-    "Neutral": ["#819A91", "#56DF5A", "#ED5E67", "#000000"]
+    "Neutral": ["#819A91", "#56DF5A", "#1B4D7C", "#000000"]
 }
 mood_emojis = {
     "Happy": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f60a/512.gif",
