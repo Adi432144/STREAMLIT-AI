@@ -12,6 +12,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 # --- AI and Model Configuration ---
+google_api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk"
+
 
 # Securely configure the Google Gemini API
 try:
@@ -140,7 +142,7 @@ def get_live_data():
         loc_res.raise_for_status()
         loc_data = loc_res.json()
         city, country = loc_data.get("city", "Unknown"), loc_data.get("country", "")
-        weather_api_key = st.secrets.get("weather_api_key", "")
+        weather_api_key = "c87ed51b805675cdc2eababdb7cc294b"
         if not weather_api_key:
             st.error("Weather API key not found. Please add it to your Streamlit secrets.")
             return f'{city}, {country}', None
