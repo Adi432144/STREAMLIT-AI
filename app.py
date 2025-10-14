@@ -186,7 +186,7 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in tokens]
     return ' '.join(tokens)
 
-def story_generation(sentiment, word_limit= word_limit):
+def story_generation(sentiment, word_limit= 150):
     prompt = (
         f"Write a unique, suspenseful short story that instantly captures the reader’s attention in the first paragraph "
         f"with a mysterious or shocking event. The story should revolve around a main character who discovers a hidden truth "
