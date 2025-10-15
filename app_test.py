@@ -283,7 +283,7 @@ else:
     st.markdown(f"<div id='greetingMessage'>Hello {st.session_state.username}, how are you feeling today?</div>", unsafe_allow_html=True)
     
     mood_cols = st.columns(4)
-    with mood_cols:
+    with mood_cols[0]:
         st.markdown(f"<div id='moodDisplay'>Your current mood is: <strong>{st.session_state.mood}</strong></div>", unsafe_allow_html=True)
 
     mood_text = st.text_area("Type something about your mood...", placeholder=f"How are you feeling today, {st.session_state.username}?", height=100)
@@ -435,4 +435,5 @@ Experience stories that truly resonate with you — this app’s theme and narra
 </footer>
 
 """, unsafe_allow_html=True)
+
 
