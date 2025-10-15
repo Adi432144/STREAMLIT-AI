@@ -20,7 +20,7 @@ nltk.download('omw-1.4')
 
 # Securely configure the Google Gemini API
 try:
-    genai.configure(ai_key="AIzaSyAT4Tmn5UTjDt92kbOAKf_L5iINbyrNk")
+    genai.configure(api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk")
 except Exception as e:
     st.error("Google API Key not found. Please add it to your Streamlit secrets.", icon="🔑")
 
@@ -282,7 +282,7 @@ if not st.session_state.username:
 else:
     st.markdown(f"<div id='greetingMessage'>Hello {st.session_state.username}, how are you feeling today?</div>", unsafe_allow_html=True)
     
-    mood_cols = st.columns(4)
+    mood_cols = st.columns(1)
     with mood_cols[0]:
         st.markdown(f"<div id='moodDisplay'>Your current mood is: <strong>{st.session_state.mood}</strong></div>", unsafe_allow_html=True)
 
@@ -433,8 +433,4 @@ Experience stories that truly resonate with you — this app’s theme and narra
 </p>
     </div>
 </footer>
-
 """, unsafe_allow_html=True)
-
-
-
