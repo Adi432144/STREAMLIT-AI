@@ -282,9 +282,7 @@ if not st.session_state.username:
 else:
     st.markdown(f"<div id='greetingMessage'>Hello {st.session_state.username}, how are you feeling today?</div>", unsafe_allow_html=True)
     
-    mood_col1, mood_col2 = st.columns([1, 4])
-    with mood_col1:
-        st.markdown(f"<div class='emoji-box'><img src='{st.session_state.mood_emoji_url}' width='100'></div>", unsafe_allow_html=True)
+    mood_col2 = st.columns(4)
     with mood_col2:
         st.markdown(f"<div id='moodDisplay'>Your current mood is: <strong>{st.session_state.mood}</strong></div>", unsafe_allow_html=True)
 
@@ -435,4 +433,5 @@ Experience stories that truly resonate with you — this app’s theme and narra
 </p>
     </div>
 </footer>
+
 """, unsafe_allow_html=True)
