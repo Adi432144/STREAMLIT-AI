@@ -20,7 +20,7 @@ nltk.download('omw-1.4')
 
 # Securely configure the Google Gemini API
 try:
-    genai.configure(api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk")
+    genai.configure(ai_key="AIzaSyAT4Tmn5UTjDt92kbOAKf_L5iINbyrNk")
 except Exception as e:
     st.error("Google API Key not found. Please add it to your Streamlit secrets.", icon="🔑")
 
@@ -110,7 +110,7 @@ def apply_mood_theme(mood):
         }}"""
     
     ui_style = f"""
-        {text_selectors} {{ color: {text_color}; transition: color 0.5s ease; }}
+        {text_selectors} {{ color: #000000; transition: color 0.5s ease; }}
         .info-box {{ 
             background-color: {story_box_bg.replace('0.85', '0.6').replace('0.6', '0.4')}; 
             border: 1px solid {text_color}33; 
@@ -435,5 +435,6 @@ Experience stories that truly resonate with you — this app’s theme and narra
 </footer>
 
 """, unsafe_allow_html=True)
+
 
 
