@@ -1,4 +1,11 @@
 /* In style.css, ensure the body rule is clean */
+p, ol, ul, dl {
+    color: black;
+    margin: 0px 0px 1rem;
+    padding: 0px;
+    font-size: 1rem;
+    font-weight: 400;
+}
 body {
     color: var(--text-color);
 }
