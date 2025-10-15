@@ -236,8 +236,8 @@ body {
 /* Emoji box like mood emoji */
 /* Replace the old .top-bar-emoji rule with this one */
 .top-bar-emoji {
-    width: 30px;      /* Changed from 40px to 30px */
-    height: 30px;     /* Changed from 40px to 30px */
+    width: 30%;      /* Changed from 40px to 30px */
+    height: 30%;     /* Changed from 40px to 30px */
     margin-right: 12px;
     object-fit: contain;
 }
