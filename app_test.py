@@ -59,6 +59,9 @@ if 'weather_data' not in st.session_state:
     st.session_state.weather_data = None
 if 'heading_index' not in st.session_state:
     st.session_state.heading_index = 0
+if 'mood_history' not in st.session_state:
+    st.session_state.mood_history = []
+
 
 # --- Asset Loading and Backend Logic ---
 
@@ -155,6 +158,26 @@ def apply_mood_theme(mood):
         {background_image_css}
     </style>
     """
+apply_mood_theme(st.session_state.mood)
+
+# --- ADD THIS SIDEBAR CODE ---
+with st.sidebar:
+    st.title("Profile")
+    if st.session_state.username:
+        st.header(f"🧑‍💻 {st.session_state.username}")
+    else:
+        st.header("🧑‍💻 Guest")
+
+    st.markdown("---")
+    st.subheader("📝 Mood History")
+    
+    if not st.session_state.mood_history:
+        st.info("Your mood entries will appear here.")
+    else:
+        # Display in reverse order (most recent on top)
+        for entry in reversed(st.session_state.mood_history):
+            st.markdown(f"> {entry}")
+# --- END OF SIDEBAR CODE ---
     st.markdown(final_css, unsafe_allow_html=True)
 
 @st.cache_data(show_spinner="Fetching live data...")
@@ -299,6 +322,7 @@ else:
                 st.session_state.mood = sentiment
                 st.session_state.story = story_generation(sentiment,word_limit=word_limit)
                 st.session_state.mood_emoji_url = mood_emojis.get(st.session_state.mood, mood_emojis["Neutral"])
+                st.session_state.mood_history.append(mood_text)
                 st.rerun()
         elif not mood_text:
             st.warning("Please type something about your mood first.", icon="✍️")
@@ -434,3 +458,4 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
