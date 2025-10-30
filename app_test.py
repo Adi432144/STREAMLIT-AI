@@ -158,6 +158,7 @@ def apply_mood_theme(mood):
         {background_image_css}
     </style>
     """
+    st.markdown(final_css, unsafe_allow_html=True)
 apply_mood_theme(st.session_state.mood)
 
 # --- ADD THIS SIDEBAR CODE ---
@@ -178,7 +179,6 @@ with st.sidebar:
         for entry in reversed(st.session_state.mood_history):
             st.markdown(f"> {entry}")
 # --- END OF SIDEBAR CODE ---
-    st.markdown(final_css, unsafe_allow_html=True)
 
 @st.cache_data(show_spinner="Fetching live data...")
 def get_live_data():
@@ -458,4 +458,5 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
