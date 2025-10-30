@@ -23,7 +23,7 @@
 }
 /* In style.css, ensure the body rule is clean */
 p, ol, ul, dl {
-    color: black;
+    color: gray;
     margin: 0px 0px 1rem;
     padding: 0px;
     font-size: 1rem;
