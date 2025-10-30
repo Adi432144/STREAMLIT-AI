@@ -84,7 +84,7 @@ body {
 #moodDisplay {
   font-size: 18px;
   font-weight: 600;
-  color: #555;
+  color: black;
 }
 
 
@@ -156,14 +156,6 @@ body {
     opacity: 1;
   }
 
-#greetingMessage {
-  margin-top: 90px;   /* creates space below the top bar */
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  color: #444;
-}
-
 /* style.css */
 
 /* Replace the old #dynamicHeading and its keyframes with this */
@@ -210,6 +202,9 @@ body {
   margin: 20px 0;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+  font-weight: bold;
+  color: black;  
 }
 
 /* Hover effect like h1 */
@@ -246,7 +241,7 @@ body {
   align-items: center;
   gap: 25px; 
   background: white;
-  color: #000000;
+  color: black;
   padding: 15px 10px;
   border-radius: 12px;
   font-weight: 600;
