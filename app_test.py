@@ -177,7 +177,7 @@ with st.sidebar:
     else:
         # Display in reverse order (most recent on top)
         for entry in reversed(st.session_state.mood_history):
-                st.markdown(f"> <div style='color: #4CAF50;'>{entry}</div>", unsafe_allow_html=True)
+                st.markdown(f"> <div style='color: #FFFFFF;'>{entry}</div>", unsafe_allow_html=True)
 # --- END OF SIDEBAR CODE ---
 
 @st.cache_data(show_spinner="Fetching live data...")
