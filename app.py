@@ -10,6 +10,9 @@ import nltk
 import google.generativeai as genai
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from streamlit_mic_recorder import mic_recorder
+import speech_recognition as sr
+import tempfile
 
 # --- AI and Model Configuration ---
 nltk.download('punkt')
@@ -227,6 +230,25 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(word) for word in tokens]
     return ' '.join(tokens)
+    
+def speech_to_text(audio_bytes):
+    recognizer = sr.Recognizer()
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+        tmp_file.write(audio_bytes)
+        tmp_file_path = tmp_file.name
+
+    with sr.AudioFile(tmp_file_path) as source:
+        audio = recognizer.record(source)
+
+    try:
+        text = recognizer.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        return ""
+    except sr.RequestError:
+        return ""
+
 
 def story_generation(sentiment, word_limit=150):
     prompt = (
@@ -327,6 +349,35 @@ else:
         elif not mood_text:
             st.warning("Please type something about your mood first.", icon="✍️")
         else:
+            st.subheader("🎙️ Speak or Type Your Mood")
+
+colA, colB = st.columns([2, 1])
+
+with colA:
+    mood_text = st.text_area(
+        "Type your mood (or use voice 🎧)",
+        placeholder=f"How are you feeling today, {st.session_state.username}?",
+        height=100
+    )
+
+with colB:
+    st.markdown("### 🎤 Voice Input")
+    audio = mic_recorder(
+        start_prompt="Start Recording",
+        stop_prompt="Stop Recording",
+        just_once=True
+    )
+
+    if audio and audio['bytes']:
+        with st.spinner("Converting speech to text..."):
+            voice_text = speech_to_text(audio['bytes'])
+            if voice_text:
+                mood_text = voice_text
+                st.success("Voice captured successfully!")
+                st.write("🗣️ **You said:**", voice_text)
+            else:
+                st.warning("Could not understand audio. Try again.")
+
             st.error("Sentiment model could not be loaded. Please check the logs.")
 
     st.markdown("---")
