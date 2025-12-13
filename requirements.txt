@@ -9,6 +9,8 @@ joblib
 streamlit-mic-recorder
 SpeechRecognition
 requests
+pydub
 
 streamlit
+
 
