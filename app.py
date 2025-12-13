@@ -359,7 +359,7 @@ else:
         else:
             st.subheader("🎙️ Speak or Type Your Mood")
 
-colB = st.columns(1)
+colB, = st.columns(1)
 
 with colB:
     st.markdown("### 🎤 Voice Input")
