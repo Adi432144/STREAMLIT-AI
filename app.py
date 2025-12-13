@@ -10,10 +10,6 @@ import nltk
 import google.generativeai as genai
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from streamlit_mic_recorder import mic_recorder
-from pydub import AudioSegment
-import speech_recognition as sr
-import tempfile
 
 # --- AI and Model Configuration ---
 nltk.download('punkt')
@@ -231,32 +227,6 @@ def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(word) for word in tokens]
     return ' '.join(tokens)
-    
-def speech_to_text(audio_bytes):
-    recognizer = sr.Recognizer()
-
-    # Save incoming audio as WEBM
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as webm_file:
-        webm_file.write(audio_bytes)
-        webm_path = webm_file.name
-
-    # Convert WEBM → WAV (PCM)
-    wav_path = webm_path.replace(".webm", ".wav")
-    audio = AudioSegment.from_file(webm_path, format="webm")
-    audio = audio.set_frame_rate(16000).set_channels(1)
-    audio.export(wav_path, format="wav")
-
-    # Read WAV with SpeechRecognition
-    with sr.AudioFile(wav_path) as source:
-        audio_data = recognizer.record(source)
-
-    try:
-        return recognizer.recognize_google(audio_data)
-    except sr.UnknownValueError:
-        return ""
-    except sr.RequestError:
-        return ""
-
 
 def story_generation(sentiment, word_limit=150):
     prompt = (
@@ -357,28 +327,6 @@ else:
         elif not mood_text:
             st.warning("Please type something about your mood first.", icon="✍️")
         else:
-            st.subheader("🎙️ Speak or Type Your Mood")
-
-colB, = st.columns(1)
-
-with colB:
-    st.markdown("### 🎤 Voice Input")
-    audio = mic_recorder(
-        start_prompt="Start Recording",
-        stop_prompt="Stop Recording",
-        just_once=True
-    )
-
-    if audio and audio['bytes']:
-        with st.spinner("Converting speech to text..."):
-            voice_text = speech_to_text(audio['bytes'])
-            if voice_text:
-                mood_text = voice_text
-                st.success("Voice captured successfully!")
-                st.write("🗣️ **You said:**", voice_text)
-            else:
-                st.warning("Could not understand audio. Try again.")
-
             st.error("Sentiment model could not be loaded. Please check the logs.")
 
     st.markdown("---")
