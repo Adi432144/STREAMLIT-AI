@@ -6,4 +6,6 @@ nltk
 regex
 google.generativeai
 joblib
+streamlit-mic-recorder
+
 streamlit
