@@ -359,14 +359,7 @@ else:
         else:
             st.subheader("🎙️ Speak or Type Your Mood")
 
-colA, colB = st.columns([2, 1])
-
-with colA:
-    mood_text = st.text_area(
-        "Type your mood (or use voice 🎧)",
-        placeholder=f"How are you feeling today, {st.session_state.username}?",
-        height=100
-    )
+colB = st.columns(1)
 
 with colB:
     st.markdown("### 🎤 Voice Input")
