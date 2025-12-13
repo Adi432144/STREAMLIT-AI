@@ -11,6 +11,7 @@ import google.generativeai as genai
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from streamlit_mic_recorder import mic_recorder
+from pydub import AudioSegment
 import speech_recognition as sr
 import tempfile
 
@@ -234,16 +235,23 @@ def preprocess_text(text):
 def speech_to_text(audio_bytes):
     recognizer = sr.Recognizer()
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-        tmp_file.write(audio_bytes)
-        tmp_file_path = tmp_file.name
+    # Save incoming audio as WEBM
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as webm_file:
+        webm_file.write(audio_bytes)
+        webm_path = webm_file.name
 
-    with sr.AudioFile(tmp_file_path) as source:
-        audio = recognizer.record(source)
+    # Convert WEBM → WAV (PCM)
+    wav_path = webm_path.replace(".webm", ".wav")
+    audio = AudioSegment.from_file(webm_path, format="webm")
+    audio = audio.set_frame_rate(16000).set_channels(1)
+    audio.export(wav_path, format="wav")
+
+    # Read WAV with SpeechRecognition
+    with sr.AudioFile(wav_path) as source:
+        audio_data = recognizer.record(source)
 
     try:
-        text = recognizer.recognize_google(audio)
-        return text
+        return recognizer.recognize_google(audio_data)
     except sr.UnknownValueError:
         return ""
     except sr.RequestError:
