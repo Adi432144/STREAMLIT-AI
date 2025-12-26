@@ -305,11 +305,71 @@ if not st.session_state.username:
 else:
     st.markdown(f"<div id='greetingMessage'>Hello {st.session_state.username}, how are you feeling today?</div>", unsafe_allow_html=True)
     
-    mood_cols = st.columns(1)
-    with mood_cols[0]:
-        st.markdown(f"<div id='moodDisplay'>Your current mood is: <strong>{st.session_state.mood}</strong></div>", unsafe_allow_html=True)
+     # 1. Initialize input mode if not exists
+    if 'input_mode' not in st.session_state:
+        st.session_state.input_mode = "Type"
 
-    mood_text = st.text_area("Type something about your mood...", placeholder=f"How are you feeling today, {st.session_state.username}?", height=100)
+    # 2. CREATE THE OPTION SCREEN (The Buttons)
+    col_type, col_voice = st.columns(2)
+    with col_type:
+        if st.button("⌨️ Type Input", use_container_width=True):
+            st.session_state.input_mode = "Type"
+    with col_voice:
+        if st.button("🎙️ Voice Input", use_container_width=True):
+            st.session_state.input_mode = "Voice"
+
+    st.markdown("---")
+
+    # 3. SWITCH CASE LOGIC for Input Method
+    mood_text = "" # Initialize empty string to store input
+    voice_text = "" # Initialize empty string to store voice input
+    st.session_state.mood_text = voice_text
+
+    if st.session_state.input_mode == "Type":
+        mood_text = st.text_area("Type something about your mood...", 
+                                placeholder=f"How are you feeling today, {st.session_state.username}?", 
+                                height=100)
+    
+    elif st.session_state.input_mode == "Voice":
+        # VOICE INPUT SECTION
+        st.write("Click the microphone to start talking:")
+        audio = mic_recorder(
+        start_prompt="⏺️ Start Recording", 
+        stop_prompt="⏹️ Stop", 
+        key='recorder'
+        )
+        audio_data = None
+        
+         # Process the recorded audio
+        
+    elif audio is not None and audio.get("bytes"):
+        with st.spinner("Processing your voice..."):
+            try:
+                # Convert recorded bytes to AudioSegment
+                audio_segment = AudioSegment.from_file(
+                    io.BytesIO(audio["bytes"])
+                )
+
+                # Export to WAV (SpeechRecognition requires WAV/AIFF/FLAC)
+                wav_io = io.BytesIO()
+                audio_segment.export(wav_io, format="wav")
+                wav_io.seek(0)
+
+                r = sr.Recognizer()
+                with sr.AudioFile(wav_io) as source:
+                    audio_data = r.record(source)
+
+                    # Speech → Text
+                    voice_text = r.recognize_google(audio_data)
+
+                    # ✅ SAVE RESULT TO SESSION STATE
+                    st.session_state.mood_text = voice_text
+
+                    st.success("Speech captured successfully!")
+                    st.write("🗣️ **You said:**", voice_text)
+
+            except Exception as e:
+                st.error(f"Voice processing failed: {e}")
     word_limit = st.slider("Select Story Length (in words)", min_value=50, max_value=400, value=150, step=10)
 
     if st.button("✨ Generate Story ✨", use_container_width=True):
@@ -458,5 +518,6 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
