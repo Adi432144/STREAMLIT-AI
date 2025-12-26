@@ -10,6 +10,11 @@ import nltk
 import google.generativeai as genai
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from streamlit_mic_recorder import mic_recorder
+import speech_recognition as sr
+from pydub import AudioSegment
+import io
+
 
 # --- AI and Model Configuration ---
 nltk.download('punkt')
@@ -518,6 +523,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
