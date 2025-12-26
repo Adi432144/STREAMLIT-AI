@@ -336,26 +336,25 @@ else:
                                 height=100)
     
     elif st.session_state.input_mode == "Voice":
-        # VOICE INPUT SECTION
-        st.write("Click the microphone to start talking:")
-        audio = mic_recorder(
-        start_prompt="⏺️ Start Recording", 
-        stop_prompt="⏹️ Stop", 
-        key='recorder'
-        )
-        audio_data = None
-        
-         # Process the recorded audio
-        
-    elif audio is not None and audio.get("bytes"):
+
+    st.write("Click the microphone to start talking:")
+
+    # 🎤 ALWAYS define audio first
+    audio = mic_recorder(
+        start_prompt="⏺️ Start Recording",
+        stop_prompt="⏹️ Stop",
+        key="recorder"
+    )
+
+    # 🎧 Process the recorded audio
+    if audio is not None and audio.get("bytes"):
         with st.spinner("Processing your voice..."):
             try:
-                # Convert recorded bytes to AudioSegment
                 audio_segment = AudioSegment.from_file(
                     io.BytesIO(audio["bytes"])
                 )
 
-                # Export to WAV (SpeechRecognition requires WAV/AIFF/FLAC)
+                # Convert to WAV
                 wav_io = io.BytesIO()
                 audio_segment.export(wav_io, format="wav")
                 wav_io.seek(0)
@@ -364,17 +363,17 @@ else:
                 with sr.AudioFile(wav_io) as source:
                     audio_data = r.record(source)
 
-                    # Speech → Text
-                    voice_text = r.recognize_google(audio_data)
+                voice_text = r.recognize_google(audio_data)
 
-                    # ✅ SAVE RESULT TO SESSION STATE
-                    st.session_state.mood_text = voice_text
+                # ✅ Save to session state
+                st.session_state.mood_text = voice_text
 
-                    st.success("Speech captured successfully!")
-                    st.write("🗣️ **You said:**", voice_text)
+                st.success("Speech captured successfully!")
+                st.write("🗣️ **You said:**", voice_text)
 
             except Exception as e:
                 st.error(f"Voice processing failed: {e}")
+
     word_limit = st.slider("Select Story Length (in words)", min_value=50, max_value=400, value=150, step=10)
 
     if st.button("✨ Generate Story ✨", use_container_width=True):
@@ -523,6 +522,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
