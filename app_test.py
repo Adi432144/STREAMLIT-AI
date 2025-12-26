@@ -337,7 +337,7 @@ else:
     
     elif st.session_state.input_mode == "Voice":
 
-            st.write("Click the microphone to start talking:")
+        st.write("Click the microphone to start talking:")
 
     # 🎤 ALWAYS define audio first
     audio = mic_recorder(
@@ -522,6 +522,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
