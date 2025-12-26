@@ -339,63 +339,76 @@ else:
 
         st.write("Click the microphone to start talking:")
 
-    # 🎤 ALWAYS define audio first
-    audio = mic_recorder(
-        start_prompt="⏺️ Start Recording",
-        stop_prompt="⏹️ Stop",
-        key="recorder"
-    )
+        # 🎤 ALWAYS define audio first
+        audio = mic_recorder(
+            start_prompt="⏺️ Start Recording",
+            stop_prompt="⏹️ Stop",
+            key="recorder"
+        )
 
-    # 🎧 Process the recorded audio
-    if audio is not None and audio.get("bytes"):
-        with st.spinner("Processing your voice..."):
-            try:
-                audio_segment = AudioSegment.from_file(
-                    io.BytesIO(audio["bytes"])
-                )
+        # 🎧 Process the recorded audio
+        if audio is not None and audio.get("bytes"):
+            with st.spinner("Processing your voice..."):
+                try:
+                    audio_segment = AudioSegment.from_file(
+                        io.BytesIO(audio["bytes"])
+                    )
 
-                # Convert to WAV
-                wav_io = io.BytesIO()
-                audio_segment.export(wav_io, format="wav")
-                wav_io.seek(0)
+                    # Convert to WAV
+                    wav_io = io.BytesIO()
+                    audio_segment.export(wav_io, format="wav")
+                    wav_io.seek(0)
 
-                r = sr.Recognizer()
-                with sr.AudioFile(wav_io) as source:
-                    audio_data = r.record(source)
+                    r = sr.Recognizer()
+                    with sr.AudioFile(wav_io) as source:
+                        audio_data = r.record(source)
 
-                voice_text = r.recognize_google(audio_data)
+                    voice_text = r.recognize_google(audio_data)
 
-                # ✅ Save to session state
-                st.session_state.mood_text = voice_text
+                    # ✅ Save to session state
+                    st.session_state.mood_text = voice_text
 
-                st.success("Speech captured successfully!")
-                st.write("🗣️ **You said:**", voice_text)
+                    st.success("Speech captured successfully!")
+                    st.write("🗣️ **You said:**", voice_text)
 
-            except Exception as e:
-                st.error(f"Voice processing failed: {e}")
+                except Exception as e:
+                    st.error(f"Voice processing failed: {e}")
+
 
     word_limit = st.slider("Select Story Length (in words)", min_value=50, max_value=400, value=150, step=10)
 
-    if st.button("✨ Generate Story ✨", use_container_width=True):
-        if mood_text and pipeline:
-            with st.spinner("Analyzing your mood and crafting a story..."):
-                processed_text = preprocess_text(mood_text)
-                prediction = pipeline.predict([processed_text])
-                sentiment = 'Happy' if prediction[0] == 4 else 'Sad'
-                apply_mood_theme(sentiment)
-                st.session_state.mood = sentiment
-                st.session_state.story = story_generation(sentiment,word_limit=word_limit)
-                st.session_state.mood_emoji_url = mood_emojis.get(st.session_state.mood, mood_emojis["Neutral"])
-                st.session_state.mood_history.append(mood_text)
-                st.rerun()
-        elif not mood_text:
-            st.warning("Please type something about your mood first.", icon="✍️")
-        else:
-            st.error("Sentiment model could not be loaded. Please check the logs.")
+    analyze_text = mood_text if st.session_state.input_mode == "Type" else voice_text
+    mood_text= st.session_state.get("mood_text", "").strip()
+    voice_text= st.session_state.get("voice_text", "").strip()
+    
 
-    st.markdown("---")
-    st.subheader("Your Adaptive Story")
-    st.markdown(f"<div class='story-container'>{st.session_state.story}</div>", unsafe_allow_html=True)
+
+if st.button("✨ Generate Story ✨", use_container_width=True):
+
+    if analyze_text and pipeline:
+        with st.spinner("Analyzing your mood and crafting a story..."):
+
+            processed_text = preprocess_text(analyze_text)
+            prediction = pipeline.predict([processed_text])
+
+            sentiment = "Happy" if prediction[0] == 4 else "Sad"
+
+            apply_mood_theme(sentiment)
+            st.session_state.mood = sentiment
+            st.session_state.story = story_generation(sentiment,word_limit=word_limit)
+            st.session_state.mood_emoji_url = mood_emojis.get(sentiment, mood_emojis["Neutral"])
+            st.session_state.mood_history.append(analyze_text)
+            st.rerun()
+
+    elif not analyze_text:
+        st.warning("Please type or speak about your mood first 🎤✍️")
+
+    else:
+        st.error("Sentiment model could not be loaded. Please check the logs.")
+
+st.markdown("---")
+st.subheader("Your Adaptive Story")
+st.markdown(f"<div class='story-container'>{st.session_state.story}</div>", unsafe_allow_html=True)
 st.markdown("""
 <style>
 :root {
@@ -522,6 +535,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
