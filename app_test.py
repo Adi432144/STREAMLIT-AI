@@ -25,7 +25,7 @@ nltk.download('omw-1.4')
 
 # Securely configure the Google Gemini API
 try:
-    genai.configure(api_key="AIzaSyAT4Tmn5UTjDt92kbPOPAKf_L5iINbyrNk")
+    genai.configure(api_key="AIzaSyBbNTFQ1F_MtcRlshed_EhqeaRPi_XHCvw")
 except Exception as e:
     st.error("Google API Key not found. Please add it to your Streamlit secrets.", icon="🔑")
 
