@@ -1,39 +1,24 @@
-.st-emotion-cache-1anq8dj {
-    display: inline-flex
-;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    font-weight: 400;
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.5rem;
-    min-height: 2.5rem;
-    margin: 0px;
-    line-height: 1.6;
-    text-transform: none;
-    font-size: inherit;
-    font-family: inherit;
-    color: white;
-    width: 100%;
-    cursor: pointer;
-    user-select: none;
-    background-color: rgb(250 250 250);
-    border: 1px solid rgba(250, 250, 250, 0.2);
-}
-h3{
-    color: black;
-}
 /* In style.css, ensure the body rule is clean */
-p, ol, ul, dl {
-    color: brown;
-    margin: 0px 0px 1rem;
-    padding: 0px;
-    font-size: 1rem;
-    font-weight: 400;
-}
 body {
     color: var(--text-color);
+}
+h1, h2, h3, .info-text, label, .footer-heading, .footer-description, div[data-testid='stMarkdown'] p, .stMarkdowner p {
+    color: gray;
+}
+#moodDisplay{
+  font-size: 18px;
+  font-weight: 600;
+  color: black;
+}
+#greetingMessage{
+  color: black;
+  font-size: 2rem;
+  margin: 20px 0;   /* creates space below the top bar */
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+    
 }
 /* General container */
 .container {
@@ -60,35 +45,8 @@ body {
 }
 
 /* Emoji + mood section */
-.emoji-section {
-  text-align: center;
-}
-.emoji-box {
-  font-size: 96px;
-  margin-bottom: 15px;
-}
-.emoji-box img {
-  width: 80px;  /* adjust size */
-  height: 80px;
-  object-fit: contain;
-  display: inline-block;
-  margin-bottom: 15px;
-}
-.emoji-box, #moodEmoji {
-  text-align: center;
-}
 
-.emoji-img {
-  width: 80px;      /* adjust size as needed */
-  height: 80px;
-  object-fit: contain;
-}
 
-#moodDisplay {
-  font-size: 18px;
-  font-weight: 600;
-  color: black;
-}
 
 
 
@@ -200,15 +158,8 @@ body {
   75% { transform: rotate(3deg); }
   100% { transform: rotate(0deg); }
 }
-#greetingMessage {
-  font-size: 2rem;
-  margin: 20px 0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  font-weight: bold;
-  color: black;  
-}
+
+
 
 /* Hover effect like h1 */
 #greetingMessage:hover {
@@ -238,22 +189,58 @@ body {
   margin: auto;
   gap: 30px;
 }
+.info-box{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgb(149, 69, 69);
+    color: #000000;
+    padding: 1px 88.4px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+    width: fit-content;
+}
 
-.info-box {
-  display: flex;
-  align-items: center;
-  gap: 25px; 
-  background: white;
-  color: black;
-  padding: 15px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: default;
-  width: fit-content;
+.info-box-small {
+      display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: white;
+    color: #000000;
+    padding: 1px 75px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+    width: fit-content;
+}
 
+/* Animated hover background for info-box */
+@keyframes move-and-color {
+  0% {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="%23ff7eb3" /><circle cx="4" cy="4" r="2" fill="%23ff758c" /><circle cx="16" cy="16" r="2" fill="%23ff758c" /></svg>');
+    background-position: 0 0;
+  }
+  50% {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="%23ffcc00" /><circle cx="4" cy="4" r="2" fill="%2300ccff" /><circle cx="16" cy="16" r="2" fill="%23ff33cc" /></svg>');
+    background-position: 25px 25px;
+  }
+  100% {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="%2300ffaa" /><circle cx="4" cy="4" r="2" fill="%23ff0066" /><circle cx="16" cy="16" r="2" fill="%23ff6600" /></svg>');
+    background-position: 50px 50px;
+  }
+}
+
+.info-box:hover,
+.info-box-small:hover {
+  animation: move-and-color 3s linear infinite;
+  background-size: 50px 50px;
 }
 
 .info-box:hover {
@@ -264,15 +251,16 @@ body {
 /* Emoji box like mood emoji */
 /* Replace the old .top-bar-emoji rule with this one */
 .top-bar-emoji {
-    width: 30%;      /* Changed from 40px to 30px */
+    width: 40%;      /* Changed from 40px to 30px */
     height: 30%;     /* Changed from 40px to 30px */
     margin-right: 12px;
-    object-fit: contain;
+    object-fit: cover;
 }
 /* Text */
 .info-text {
   width: fit-content;
   text-align: left;
+  color: #ffffff;
 }
 
 /* Weather icons (fallback from API) */
