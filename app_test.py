@@ -44,8 +44,8 @@ mood_emojis = {
 utility_emojis = {
     "clock": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExanVlZ2puNjdzd3I5NjUwOW13aXlkd3ljZWxzYzAxa2dsczh4a2Z2dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/2zdVnsL3mbrs4xg4fr/giphy.gif",
     "globe": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExajhzaHdvMm05a29zcTNibzdjeTdpdHAxYzc5eHc3YmJienloYXk4ZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/mf8UbIDew7e8g/giphy.gif",
-    "rainyCloud": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2t5eWs2aTl4OTJpeTF4MjJ6NDNxNmpxbGFjYjR1eng1Y2p1aW95dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/gk3s6G7AdUNkey0YpE/giphy.gif",
-    "lightningCloud": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2t5eWs2aTl4OTJpeTF4MjJ6NDNxNmpxbGFjYjR1eng1Y2p1aW95dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xaZCqV4weJwHu/giphy.gif"
+    "weather": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm52cTlvaXB0ODgyNHVkdDBpeWphbmd2ajhwazg1Y2R2Yzd5eDl2bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tc67RD5mlzvFTqSGUO/giphy.gif",
+    
 }
 
 # --- Page and Session State Initialization ---
@@ -106,7 +106,7 @@ def apply_mood_theme(mood):
     info_box_base_style = "border-radius: 10px; transition: background-color 0.5s ease, border 0.5s ease;"
 
     # Selectors for all text elements we want to change
-    text_selectors = "h1, h2, h3, .info-text, #greetingMessage, #moodDisplay, label, .footer-heading, .footer-description, div[data-testid='stMarkdown'] p, .stMarkdown"
+    text_selectors = "h1, h2, h3, #greetingMessage, #moodDisplay, label, .footer-heading, .footer-description, div[data-testid='stMarkdown'] p, .stMarkdown"
     
     # --- Styles for story box and general UI ---
     story_box_style = f"""
@@ -287,7 +287,7 @@ with col1:
 with col2:
     st.markdown(f'<div class="info-box"><img src="{utility_emojis["globe"]}" class="top-bar-emoji"><div class="info-text">{st.session_state.location_data}</div></div>', unsafe_allow_html=True)
 with col3:
-    weather_text, weather_icon = "Weather unavailable", "🌥️"
+    weather_text, weather_icon = "Weather unavailable", f'<img src="{utility_emojis["weather"]}" class="top-bar-emoji">'
     if st.session_state.weather_data and "main" in st.session_state.weather_data:
         weather = st.session_state.weather_data
         temp = round(weather["main"]["temp"])
@@ -535,6 +535,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
