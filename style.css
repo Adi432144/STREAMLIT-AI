@@ -204,6 +204,21 @@ h1, h2, h3, .info-text, label, .footer-heading, .footer-description, div[data-te
     cursor: default;
     width: fit-content;
 }
+.info-box1{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgb(149, 69, 69);
+    color: #000000;
+    padding: 1px 88.4px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+    width: fit-content;
+}
 
 .info-box-small {
       display: flex;
