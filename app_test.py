@@ -285,7 +285,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(f'<div class="info-box"><img src="{utility_emojis["clock"]}" class="top-bar-emoji"><div class="info-text">{datetime.now().strftime("%d %b, %I:%M %p")}</div></div>', unsafe_allow_html=True)
 with col2:
-    st.markdown(f'<div class="info-box"><img src="{utility_emojis["globe"]}" class="top-bar-emoji"><div class="info-text">{st.session_state.location_data}</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="info-box1"><img src="{utility_emojis["globe"]}" class="top-bar-emoji"><div class="info-text">{st.session_state.location_data}</div></div>', unsafe_allow_html=True)
 with col3:
     weather_text, weather_icon = "Weather unavailable", f'<img src="{utility_emojis["weather"]}" class="top-bar-emoji">'
     if st.session_state.weather_data and "main" in st.session_state.weather_data:
@@ -535,6 +535,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
