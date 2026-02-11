@@ -185,7 +185,7 @@ h1, h2, h3, .info-text, label, .footer-heading, .footer-description, div[data-te
   display: flex;
   justify-content: space-around;
   align-items: center;
-  max-width: 900px;
+  max-width: 400px;
   margin: auto;
   gap: 30px;
 }
