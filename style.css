@@ -84,9 +84,7 @@ body {
   text-align: center;
 }
 
-.story-container {
-  color: var(--text-color);
-}
+
 
 /* Story Output Section */
 .story-output {
