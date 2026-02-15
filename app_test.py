@@ -113,7 +113,7 @@ def apply_mood_theme(mood):
         }}"""
     
     ui_style = f"""
-        {text_selectors} {{ color: #000000; transition: color 0.5s ease; }}
+        {text_selectors} {{ transition: color 0.5s ease; }}
         /* Ensure the Streamlit markdown container also gets the text color */
         div[data-testid='stText'] {{ color: {text_color}; }}
     """
@@ -676,6 +676,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
