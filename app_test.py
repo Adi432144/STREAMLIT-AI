@@ -260,6 +260,10 @@ st.markdown(f"<style>{get_local_css('style.css')}</style>", unsafe_allow_html=Tr
 # ==========================================================
 
 # Make sure live data exists
+# ==========================================================
+# HOLOGRAPHIC CARD (BIG + MINI, RENDER SAFE TOGGLE BUTTON)
+# ==========================================================
+
 if st.session_state.location_data is None:
     st.session_state.location_data, st.session_state.weather_data = get_live_data()
 
@@ -279,8 +283,8 @@ html_holo_card = f"""
 <html>
 <head>
 <meta charset="UTF-8">
+
 <style>
-/* IMPORTANT: force the card itself to use its own CSS */
 body {{
   margin: 0;
   padding: 0;
@@ -290,35 +294,151 @@ body {{
   align-items: center;
 }}
 
-/* wrapper */
 .holo-wrapper {{
   width: 1050px;
   max-width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  cursor: pointer;
+  font-family: Arial, sans-serif;
 }}
 
-/* split view (3 mini cards) */
-.holo-split {{
+.holo-toggle {{
+  width: 100%;
   display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}}
+
+.holo-btn {{
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,255,255,0.35);
+  background: rgba(0,0,0,0.75);
+  color: #00ffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}}
+
+.holo-btn:hover {{
+  box-shadow: 0 0 16px rgba(0,255,255,0.35);
+  transform: scale(1.02);
+}}
+
+.holo-card {{
+  width: 100%;
+  height: 240px;
+  border-radius: 26px;
+  background: rgba(0,0,0,0.88);
+  border: 1px solid rgba(0,255,255,0.35);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}}
+
+.holo-card::before {{
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    0deg,
+    transparent,
+    transparent 30%,
+    rgba(0,255,255,0.28)
+  );
+  transform: rotate(-45deg);
+  opacity: 0;
+  transition: all 0.55s ease;
+}}
+
+.holo-card:hover {{
+  transform: scale(1.02);
+  box-shadow: 0 0 22px rgba(0,255,255,0.45);
+}}
+
+.holo-card:hover::before {{
+  opacity: 1;
+  transform: rotate(-45deg) translateY(110%);
+}}
+
+.holo-text {{
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0,255,255,0.3);
+  z-index: 2;
+  position: relative;
+}}
+
+.holo-time {{
+  font-size: 46px;
+  font-weight: 900;
+  margin: 5px 0;
+}}
+
+.holo-date {{
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}}
+
+.holo-hr {{
+  width: 40%;
+  border: 0.5px solid rgba(0,255,255,0.25);
+  margin: 16px 0;
+  z-index: 2;
+}}
+
+.holo-city {{
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}}
+
+.holo-temp {{
+  font-size: 50px;
+  font-weight: 900;
+}}
+
+.holo-desc {{
+  font-size: 14px;
+  opacity: 0.8;
+}}
+
+.holo-split {{
+  display: none;
   gap: 18px;
   justify-content: center;
   align-items: stretch;
   width: 100%;
 }}
 
+.holo-split.active {{
+  display: flex;
+}}
+
 .holo-mini {{
   flex: 1;
   min-width: 0;
   height: 180px;
-
   border-radius: 22px;
 
-  /* ✅ FIX: NOT TRANSPARENT */
-  background: rgba(0, 0, 0, 0.85);
+  /* ✅ not transparent */
+  background: rgba(0,0,0,0.88);
 
-  border: 1px solid rgba(0, 255, 255, 0.35);
+  border: 1px solid rgba(0,255,255,0.35);
   box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 
   display: flex;
@@ -364,13 +484,6 @@ body {{
   transform: rotate(-45deg) translateY(110%);
 }}
 
-.holo-text {{
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0,255,255,0.3);
-  z-index: 2;
-  position: relative;
-}}
-
 .holo-mini-title {{
   font-size: 13px;
   letter-spacing: 3px;
@@ -397,7 +510,24 @@ body {{
 
 <div class="holo-wrapper">
 
-  <div class="holo-split">
+  <div class="holo-toggle">
+    <button class="holo-btn" id="toggleBtn">Split Card</button>
+  </div>
+
+  <!-- BIG CARD -->
+  <div class="holo-card" id="bigCard">
+    <div class="holo-date holo-text" id="bigDate">DATE</div>
+    <div class="holo-time holo-text" id="bigClock">00:00:00</div>
+
+    <hr class="holo-hr">
+
+    <div class="holo-city holo-text">{city_name}</div>
+    <div class="holo-temp holo-text">{temp_text}</div>
+    <div class="holo-desc holo-text">{desc_text}</div>
+  </div>
+
+  <!-- MINI CARDS -->
+  <div class="holo-split" id="miniRow">
 
     <div class="holo-mini">
       <div class="holo-mini-title holo-text">Time & Date</div>
@@ -418,6 +548,7 @@ body {{
     </div>
 
   </div>
+
 </div>
 
 <script>
@@ -425,9 +556,13 @@ function updateClock() {{
   const now = new Date();
   const h = String(now.getHours()).padStart(2, '0');
   const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
 
   const options = {{ weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }};
   const d = now.toLocaleDateString('en-US', options);
+
+  document.getElementById("bigClock").textContent = h + ":" + m + ":" + s;
+  document.getElementById("bigDate").textContent = d;
 
   document.getElementById("miniClock").textContent = h + ":" + m;
   document.getElementById("miniDate").textContent = d;
@@ -435,14 +570,33 @@ function updateClock() {{
 
 setInterval(updateClock, 1000);
 updateClock();
+
+const btn = document.getElementById("toggleBtn");
+const bigCard = document.getElementById("bigCard");
+const miniRow = document.getElementById("miniRow");
+
+let isSplit = false;
+
+btn.addEventListener("click", () => {{
+  isSplit = !isSplit;
+
+  if (isSplit) {{
+    bigCard.style.display = "none";
+    miniRow.classList.add("active");
+    btn.textContent = "Combine Card";
+  }} else {{
+    miniRow.classList.remove("active");
+    bigCard.style.display = "flex";
+    btn.textContent = "Split Card";
+  }}
+}});
 </script>
 
 </body>
 </html>
 """
 
-components.html(html_holo_card, height=220)
-
+components.html(html_holo_card, height=470)
 # Main UI
 st.markdown(f"<h1  id='dynamicHeading'>AI Mood Adaptive Story</h1>", unsafe_allow_html=True)
 
@@ -676,6 +830,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
