@@ -14,6 +14,8 @@ from streamlit_mic_recorder import mic_recorder
 import speech_recognition as sr
 from pydub import AudioSegment
 import io
+import streamlit.components.v1 as components
+
 
 
 # --- AI and Model Configuration ---
@@ -41,12 +43,7 @@ mood_emojis = {
     "Sad": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXIyejVyNXVucHdhczR1OWVxYnM4NTJkZTV5OGttcDlrcDhleXQydyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/fhLgA6nJec3Cw/giphy.gif",
     "Neutral": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2VxeWpnNXNydTB2cTJ0cm5nYzhxczE4d3B6bTkzNTdkaTNicjdhOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/iyCUpd3MOYLf8COyPQ/giphy.gif"
 }
-utility_emojis = {
-    "clock": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExanVlZ2puNjdzd3I5NjUwOW13aXlkd3ljZWxzYzAxa2dsczh4a2Z2dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/2zdVnsL3mbrs4xg4fr/giphy.gif",
-    "globe": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExajhzaHdvMm05a29zcTNibzdjeTdpdHAxYzc5eHc3YmJienloYXk4ZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/mf8UbIDew7e8g/giphy.gif",
-    "weather": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm52cTlvaXB0ODgyNHVkdDBpeWphbmd2ajhwazg1Y2R2Yzd5eDl2bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tc67RD5mlzvFTqSGUO/giphy.gif",
-    
-}
+
 
 # --- Page and Session State Initialization ---
 
@@ -103,8 +100,6 @@ def apply_mood_theme(mood):
         font-size: 1.1em; line-height: 1.6;
         transition: background-color 0.5s ease, color 0.5s ease, border 0.5s ease;
     """
-    info_box_base_style = "border-radius: 10px; transition: background-color 0.5s ease, border 0.5s ease;"
-
     # Selectors for all text elements we want to change
     text_selectors = "h1, h2, h3, #greetingMessage, #moodDisplay, label, .footer-heading, .footer-description, div[data-testid='stMarkdown'] p, .stMarkdown"
     
@@ -119,11 +114,6 @@ def apply_mood_theme(mood):
     
     ui_style = f"""
         {text_selectors} {{ color: #000000; transition: color 0.5s ease; }}
-        .info-box {{ 
-            background-color: {story_box_bg.replace('0.85', '0.6').replace('0.6', '0.4')}; 
-            border: 1px solid {text_color}33; 
-            {info_box_base_style} 
-        }}
         /* Ensure the Streamlit markdown container also gets the text color */
         div[data-testid='stText'] {{ color: {text_color}; }}
     """
@@ -261,44 +251,197 @@ pipeline = load_sentiment_model()
 if st.session_state.location_data is None:
     st.session_state.location_data, st.session_state.weather_data = get_live_data()
 
-apply_mood_theme(st.session_state.mood)
 st.markdown(f"<style>{get_local_css('style.css')}</style>", unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-/* Keeping this block for safety and to override default Streamlit style if necessary */
-.story-container {
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    font-size: 1.1em;
-    line-height: 1.6;
-}
-</style>
-""", unsafe_allow_html=True)
 
-# Top Info Bar
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.markdown(f'<div class="info-box"><img src="{utility_emojis["clock"]}" class="top-bar-emoji"><div class="info-text">{datetime.now().strftime("%d %b, %I:%M %p")}</div></div>', unsafe_allow_html=True)
-with col2:
-    st.markdown(f'<div class="info-box1"><img src="{utility_emojis["globe"]}" class="top-bar-emoji"><div class="info-text">{st.session_state.location_data}</div></div>', unsafe_allow_html=True)
-with col3:
-    weather_text, weather_icon = "Weather unavailable", f'<img src="{utility_emojis["weather"]}" class="top-bar-emoji">'
-    if st.session_state.weather_data and "main" in st.session_state.weather_data:
-        weather = st.session_state.weather_data
-        temp = round(weather["main"]["temp"])
-        desc = weather["weather"][0]["description"]
-        weather_text = f"{desc.title()}, {temp}°C"
-        main_cond = weather["weather"][0]["main"].lower()
-        if main_cond in ["rain", "drizzle", "squall"]:
-            weather_icon = f'<img src="{utility_emojis["rainyCloud"]}" class="top-bar-emoji">'
-        elif main_cond == "thunderstorm":
-            weather_icon = f'<img src="{utility_emojis["lightningCloud"]}" class="top-bar-emoji">'
-    st.markdown(f'<div class="info-box">{weather_icon}<div class="info-text">{weather_text}</div></div>', unsafe_allow_html=True)
+
+# ==========================================================
+# HOLOGRAPHIC CARD (NO ICONS, MINI NOT TRANSPARENT)
+# ==========================================================
+
+# Make sure live data exists
+if st.session_state.location_data is None:
+    st.session_state.location_data, st.session_state.weather_data = get_live_data()
+
+city_name = st.session_state.location_data or "Unknown"
+temp_text = "--"
+desc_text = "Weather unavailable"
+
+if st.session_state.weather_data and "main" in st.session_state.weather_data:
+    try:
+        temp_text = f"{round(st.session_state.weather_data['main']['temp'])}°C"
+        desc_text = st.session_state.weather_data["weather"][0]["description"].title()
+    except:
+        pass
+
+html_holo_card = f"""
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+/* IMPORTANT: force the card itself to use its own CSS */
+body {{
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}}
+
+/* wrapper */
+.holo-wrapper {{
+  width: 1050px;
+  max-width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+}}
+
+/* split view (3 mini cards) */
+.holo-split {{
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+}}
+
+.holo-mini {{
+  flex: 1;
+  min-width: 0;
+  height: 180px;
+
+  border-radius: 22px;
+
+  /* ✅ FIX: NOT TRANSPARENT */
+  background: rgba(0, 0, 0, 0.85);
+
+  border: 1px solid rgba(0, 255, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  padding: 18px 16px;
+  box-sizing: border-box;
+
+  position: relative;
+  overflow: hidden;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}}
+
+.holo-mini::before {{
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    0deg,
+    transparent,
+    transparent 30%,
+    rgba(0,255,255,0.28)
+  );
+  transform: rotate(-45deg);
+  opacity: 0;
+  transition: all 0.55s ease;
+}}
+
+.holo-mini:hover {{
+  transform: scale(1.03);
+  box-shadow: 0 0 22px rgba(0,255,255,0.45);
+}}
+
+.holo-mini:hover::before {{
+  opacity: 1;
+  transform: rotate(-45deg) translateY(110%);
+}}
+
+.holo-text {{
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0,255,255,0.3);
+  z-index: 2;
+  position: relative;
+}}
+
+.holo-mini-title {{
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}}
+
+.holo-mini-main {{
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}}
+
+.holo-mini-sub {{
+  font-size: 13px;
+  opacity: 0.78;
+}}
+</style>
+</head>
+
+<body>
+
+<div class="holo-wrapper">
+
+  <div class="holo-split">
+
+    <div class="holo-mini">
+      <div class="holo-mini-title holo-text">Time & Date</div>
+      <div class="holo-mini-main holo-text" id="miniClock">00:00</div>
+      <div class="holo-mini-sub holo-text" id="miniDate">DATE</div>
+    </div>
+
+    <div class="holo-mini">
+      <div class="holo-mini-title holo-text">Location</div>
+      <div class="holo-mini-main holo-text">{city_name}</div>
+      <div class="holo-mini-sub holo-text">City</div>
+    </div>
+
+    <div class="holo-mini">
+      <div class="holo-mini-title holo-text">Temp & Weather</div>
+      <div class="holo-mini-main holo-text">{temp_text}</div>
+      <div class="holo-mini-sub holo-text">{desc_text}</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function updateClock() {{
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+
+  const options = {{ weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }};
+  const d = now.toLocaleDateString('en-US', options);
+
+  document.getElementById("miniClock").textContent = h + ":" + m;
+  document.getElementById("miniDate").textContent = d;
+}}
+
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>
+"""
+
+components.html(html_holo_card, height=220)
 
 # Main UI
 st.markdown(f"<h1  id='dynamicHeading'>AI Mood Adaptive Story</h1>", unsafe_allow_html=True)
@@ -455,7 +598,6 @@ body, .main-container {
 
 </style>
 <script>
-<script>
 function setDynamicTheme(bgColor) {
   // Apply background color
   document.documentElement.style.setProperty('--bg-color', bgColor);
@@ -480,7 +622,6 @@ function invertColor(hex) {
 // Example: mood change or background update
 // setDynamicTheme('#222831');  // dark mood
 // setDynamicTheme('#FFD0C7');  // happy mood
-</script>
 
 </script>
 """, unsafe_allow_html=True)
@@ -535,6 +676,7 @@ Experience stories that truly resonate with you — this app’s theme and narra
     </div>
 </footer>
 """, unsafe_allow_html=True)
+
 
 
 
