@@ -786,50 +786,171 @@ bg_color = color_palette.get(st.session_state.mood, color_palette["Neutral"])[0]
 st.markdown(f"<script>setDynamicTheme('{bg_color}');</script>", unsafe_allow_html=True)
 
 # --- NEW: Footer with Box Styling and Hover Animation ---
-st.markdown("---")
-st.markdown("""
+footer_html = """
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-.dynamic-footer {
-    background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 40px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: all 0.3s ease-in-out; /* This makes the hover effect smooth */
-}
+    /* Reset some default Streamlit styles that might leak in */
+    .custom-footer a {
+        text-decoration: none !important;
+    }
 
-.dynamic-footer:hover {
-    transform: translateY(-5px); /* Lifts the box up slightly */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Makes the shadow more pronounced */
-}
+    .custom-footer {
+        width: 100%;
+        background-color: white;
+        color: #777;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 40px 20px 0 20px; /* Added some side padding */
+        margin-top: 50px;
+    }
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    /* Email Input Styling */
+    .footer-subscribe {
+        display: flex;
+        align-items: center;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        padding: 5px 15px;
+        width: 250px;
+        transition: all 0.3s ease; /* Smooth transition */
+    }
+    .footer-subscribe:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Soft shadow on hover */
+        background-color: #e8e8e8;
+    }
+    .footer-subscribe input {
+        border: none;
+        background: transparent;
+        outline: none;
+        padding: 10px 0;
+        width: 100%;
+        color: #333;
+    }
+    .footer-subscribe button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: #333;
+    }
+    .footer-subscribe button i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+    /* Make the arrow slide right and turn blue on hover */
+    .footer-subscribe:hover button i {
+        transform: translateX(4px);
+        color: #2b50ff; 
+    }
 
-.footer-heading {
-    margin-bottom: 10px;
-    color: #333;
-}
+    /* Top Navigation Styling */
+    .footer-nav a {
+        color: #777;
+        margin: 0 15px;
+        font-weight: 500;
+        font-size: 15px;
+        transition: color 0.3s ease;
+    }
+    .footer-nav a:hover {
+        color: #2b50ff; /* Shift to brand blue */
+    }
+    
+    /* Social Icons Styling */
+    .footer-socials a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        color: #555;
+        margin-left: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease; /* Smooth transition */
+    }
+    .footer-socials a:hover {
+        background-color: #2b50ff; /* Blue background */
+        color: white; /* White icon */
+        transform: translateY(-3px); /* Lift up effect */
+        box-shadow: 0 5px 15px rgba(43, 80, 255, 0.3); /* Blue glow shadow */
+    }
 
-.footer-description {
-    color: #555;
-    font-size: 1.1em;
-}
-
-/* ENSURE FOOTER TEXT CONTRAST */
-.dynamic-footer .footer-heading, 
-.dynamic-footer .footer-description {
-    color: #1E1E1E !important; /* Forces dark color for contrast on light footer background */
-}
+    /* Bottom Section Styling */
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #eaeaea;
+        padding: 30px 0;
+        font-size: 14px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .footer-bottom-links a {
+        color: #777;
+        margin-right: 20px;
+        transition: color 0.3s ease;
+    }
+    .footer-bottom-links a:hover {
+        color: #2b50ff;
+    }
+    
+    /* Brand Logo */
+    .footer-brand {
+        color: #2b50ff;
+        font-size: 24px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+    }
+    .footer-brand:hover {
+        transform: scale(1.05); /* Slight pop/zoom effect */
+    }
 </style>
 
-<footer class="dynamic-footer">
-    <div class="footer-content">
-        <h2 class="footer-heading">🌟 Mood Adaptive Story Generator</h2>
-        <p class="footer-description">
-Experience stories that truly resonate with you — this app’s theme and narrative content adapt to your feelings, moods, and emotions in real time. Powered by AI, bringing your inner world to life. 💫
-</p>
+<div class="custom-footer">
+    <div class="footer-top">
+        <div class="footer-subscribe">
+            <input type="email" placeholder="Enter your email">
+            <button><i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="footer-nav">
+            <a href="#">Features</a>
+            <a href="#">Blog</a>
+            <a href="#">Pricing</a>
+            <a href="#">Services</a>
+        </div>
+        <div class="footer-socials">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        </div>
     </div>
-</footer>
-""", unsafe_allow_html=True)
+    <div class="footer-bottom">
+        <div class="footer-bottom-links">
+            <a href="#">Terms</a>
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Contact</a>
+        </div>
+        <a href="#" class="footer-brand">AI Mood Adaptive Story</a>
+        <div>
+            &copy; 2019. All Rights Reserved.
+        </div>
+    </div>
+</div>
+"""
+
+# Render the footer
+st.markdown(footer_html, unsafe_allow_html=True)
+
+
 
 
 
