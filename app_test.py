@@ -27,7 +27,7 @@ nltk.download('omw-1.4')
 
 # Securely configure the Google Gemini API
 try:
-    genai.configure(api_key="AIzaSyBbNTFQ1F_MtcRlshed_EhqeaRPi_XHCvw")
+    genai.configure(api_key="AIzaSyB_0CIJZwGavWu6WBb3UyUyNJEMPoIpVf4")
 except Exception as e:
     st.error("Google API Key not found. Please add it to your Streamlit secrets.", icon="🔑")
 
@@ -949,6 +949,7 @@ footer_html = """
 
 # Render the footer
 st.markdown(footer_html, unsafe_allow_html=True)
+
 
 
 
