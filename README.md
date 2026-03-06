@@ -1,36 +1,28 @@
-# 🤖 Streamlit AI Explorer
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_svg)](https://your-app-link.streamlit.app/)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# 🤖 Streamlit AI: Multi-Model Chat Interface
+[![Live Demo](https://img.shields.io/badge/Render-Live_Demo-00d1b2?style=for-the-badge&logo=render&logoColor=white)](https://streamlit-ai-by5h.onrender.com)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-3776ab?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Framework](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
 
-An interactive playground leveraging **Google Gemini Pro** and **Streamlit** to demonstrate real-time AI capabilities. This project bridges the gap between complex LLM APIs and a user-friendly web interface.
+An production-grade AI Chatbot interface built with **Streamlit** and powered by the **Google Gemini 1.5 Flash** model. This application demonstrates how to bridge high-performance LLMs with a reactive web UI for real-time natural language processing.
 
 ---
 
-## ✨ Key Features
-* **Context-Aware Chat:** Maintains conversation history for a seamless user experience.
-* **Multimodal Support:** (If applicable) Upload images for instant AI vision analysis.
-* **Low-Latency Streaming:** Responses are streamed token-by-token for a modern UI feel.
-* **Configurable Parameters:** Adjust temperature and top-p settings directly from the sidebar.
+## 🌟 Key Features
+* **Gemini 1.5 Flash Integration:** Leverages Google's high-speed, low-latency model for near-instant responses.
+* **Stateful Chat History:** Maintains conversation context throughout the session using Streamlit's `session_state`.
+* **Markdown Rendering:** Full support for code snippets, tables, and formatted text in AI responses.
+* **Responsive Deployment:** Optimized for both desktop and mobile viewing via Render.
 
-## 📸 Demo
-![Project Demo](https://via.placeholder.com/800x400?text=Insert+a+GIF+of+your+App+Working+Here)
+## 🛠️ Technical Architecture
+This project follows a clean **Controller-View** pattern within the Streamlit framework:
+* **Frontend:** Streamlit's reactive components handle user input and message rendering.
+* **LLM Orchestration:** `google-generativeai` SDK manages the secure connection to Google AI Studio.
+* **Environment Management:** Secure API key handling via Streamlit Secrets (for production) and `.env` (for local development).
 
-## 🚀 Getting Started
+## 🚀 Quick Start (Local Development)
 
-### 1. Prerequisites
-* Python 3.9 or higher
-* A Google Gemini API Key ([Get one here](https://aistudio.google.com/))
-
-### 2. Installation
+### 1. Installation
 ```bash
-# Clone the repository
 git clone [https://github.com/Adi432144/STREAMLIT-AI.git](https://github.com/Adi432144/STREAMLIT-AI.git)
 cd STREAMLIT-AI
-
-# Create a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-
-# Install dependencies
 pip install -r requirements.txt
